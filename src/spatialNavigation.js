@@ -384,7 +384,9 @@ class SpatialNavigation {
     }
   }
 
-  getEventType(keyCode) {
+  getEventType(event) {
+    const keyCode = event.keyCode || parseInt(event.key, 10);
+
     return findKey(this.getKeyMap(), (codeArray) => includes(codeArray, keyCode));
   }
 
@@ -400,7 +402,7 @@ class SpatialNavigation {
           this.logIndex += 1;
         }
 
-        const eventType = this.getEventType(event.keyCode);
+        const eventType = this.getEventType(event);
 
         if (!eventType) {
           return;
@@ -445,7 +447,7 @@ class SpatialNavigation {
 
       // When throttling then make sure to only throttle key down and cancel any queued functions in case of key up
       this.keyUpEventListener = (event) => {
-        const eventType = this.getEventType(event.keyCode);
+        const eventType = this.getEventType(event);
 
         Reflect.deleteProperty(this.pressedKeys, eventType);
 
@@ -607,7 +609,7 @@ class SpatialNavigation {
   onKeyEvent(event) {
     this.visualDebugger && this.visualDebugger.clear();
 
-    const direction = this.getEventType(event.keyCode);
+    const direction = this.getEventType(event);
 
     this.smartNavigate(direction, null, {event});
   }
